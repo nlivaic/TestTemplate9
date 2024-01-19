@@ -106,7 +106,7 @@ resource app_service_web 'Microsoft.Web/sites@2022-09-01' = {
       connectionStrings: [
         {
           name: db_connection_string_env_var_name
-          connectionString: 'Server=tcp:${sqlserver.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlserver::sqlDb.name};Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=Active Directory Managed Identity;'
+          connectionString: 'Server=tcp:${sqlserver.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlserver::sqlDb.name};Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
           type: 'SQLAzure'
         }
         {
