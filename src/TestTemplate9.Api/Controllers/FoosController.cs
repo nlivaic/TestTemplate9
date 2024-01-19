@@ -12,6 +12,7 @@ using TestTemplate9.Application.Questions.Queries;
 namespace TestTemplate9.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class FoosController : ControllerBase
     {
