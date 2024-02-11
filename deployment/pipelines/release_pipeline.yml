@@ -97,7 +97,18 @@ jobs:
             scriptPath: './deployment/provisionResourceGroup.ps1'
             arguments: '$(LOCATION) $(ENVIRONMENT) $(PROJECT_NAME)'
             powerShellErrorActionPreference: stop
-        
+
+        - task: AzureCLI@2
+          displayName: 'Sql Entra-Only Auth - Disable'
+          name: 'SqlEntraOnlyAuthDisable'
+          inputs:
+            azureSubscription: 'AzureConnection'
+            scriptType: pscore
+            scriptLocation: 'scriptPath'
+            scriptPath: './deployment/sqlEntraOnlyAuthDisable.ps1'
+            arguments: '$(provisionResourceGroup.resourceGroupName)'
+            powerShellErrorActionPreference: stop
+
         - task: AzureCLI@2
           displayName: 'Provision Resources'
           name: 'provisionResources'
@@ -106,11 +117,22 @@ jobs:
             scriptType: pscore
             scriptLocation: 'scriptPath'
             scriptPath: './deployment/provisionResources.ps1'
-            arguments: '$(ENVIRONMENT) $(PROJECT_NAME) $(provisionResourceGroup.resourceGroupName) $(DB_USER) $(DB_PASSWORD) $(entraApiRegistration.authAuthority) $(entraApiRegistration.authAudience) $(entraApiRegistration.authValidIssuer)'
+            arguments: '$(ENVIRONMENT) $(PROJECT_NAME) $(provisionResourceGroup.resourceGroupName) $(SQL_ADMIN_USERNAME) $(SQL_ADMIN_PASSWORD) $(entraApiRegistration.authAuthority) $(entraApiRegistration.authAudience) $(entraApiRegistration.authValidIssuer)'
             powerShellErrorActionPreference: stop
 
-        - script: dotnet $(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll "$(provisionResources.dbConnection)" "$(DB_USER)" "$(DB_PASSWORD)" "$(Pipeline.Workspace)/drop/TestTemplate9.Migrations"
-          displayName: 'Migrate database'
+        - task: AzureCLI@2
+          displayName: 'Sql Entra Auth'
+          name: 'SqlAdAuth'
+          inputs:
+            azureSubscription: 'AzureConnection'
+            scriptType: pscore
+            scriptLocation: 'scriptPath'
+            scriptPath: './deployment/sqlEntraAuth.ps1'
+            arguments: '$(SQL_ADMINS_GROUP_NAME) $(SQL_ADMIN_USERNAME) $(SQL_ADMIN_PASSWORD)   $(SQL_USERS_GROUP_NAME) $(provisionResourceGroup.resourceGroupName) $(provisionResources.appServiceWebName) $(provisionResources.sqlServerName)'
+            powerShellErrorActionPreference: stop
+
+        #- script: dotnet $(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll "$(provisionResources.dbConnection)" "$(SQL_ADMIN_USERNAME)" "$(SQL_ADMIN_PASSWORD)" "$(Pipeline.Workspace)/drop/TestTemplate9.Migrations"
+        #  displayName: 'Migrate database'
 
         - task: AzureWebApp@1
           displayName: 'Deploy TestTemplate9.Api to App Service'

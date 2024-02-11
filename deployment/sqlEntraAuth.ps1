@@ -1,12 +1,4 @@
-$sqlAdminsGroupName = 'sqladmins'
-$sqlAdminUserName = 'sqladmin'
-$sqlAdminUserPassword = 'Soferdzo_1'
-$sqlUsersGroupName = 'sqlusers'
-$sqlUserUserName = 'sqluser'
-$sqlUserUserPassword = 'Soferdzo_1'
-$resourceGroupName = 'WE-DEV-TESTTEMPLATE9-RG'
-$appServiceWebName = 'wedevtesttemplate9web1'
-$sqlServerName = 'wedevtesttemplate9sql1'
+param ($sqlAdminsGroupName, $sqlAdminUserName, $sqlAdminUserPassword, $sqlUsersGroupName, $resourceGroupName, $appServiceWebName, $sqlServerName)
 
 $domain = (az rest --method get --url 'https://graph.microsoft.com/v1.0/domains?$select=id' --query value --output tsv)
 ####################################################
@@ -40,7 +32,6 @@ Write-Host "--- Create and Populate Azure Sql Admin Group - END ---" -Foreground
 ### Create Azure Sql User Group
 ####################################################
 Write-Host "--- Create and Populate Azure Sql User Group - START ---" -ForegroundColor Yellow
-$sqlUserUserPrincipalName = $sqlUserUserName + '@' + $domain
 $sqlUsersGroupId=(az ad group list --filter "displayName eq '$sqlUsersGroupName'" --query '[].id' --output tsv)
 If ($sqlUsersGroupId -eq $null) {
     $sqlUsersGroupId=(az ad group create --display-name $sqlUsersGroupName --mail-nickname $sqlUsersGroupName --query id --output tsv)
@@ -83,7 +74,7 @@ If ($managedIdentityId -eq $null) {
 # Add Managed Identity to sqlusersgroup
 $isInGroup = (az ad group member check --group $sqlUsersGroupId --member-id $managedIdentityId  --query value --output tsv)
 if ($isInGroup -eq 'false') {
-    Write-Host 'ccc'
     az ad group member add --group $sqlUsersGroupId --member-id $managedIdentityId
     Write-Host "Added Entra Managed Identity '$appServiceWebName' with id '$managedIdentityId' to group: $sqlUsersGroupId" -ForegroundColor Green
 }
+Write-Host "--- Create Managed Identity for Web API - END ---" -ForegroundColor Yellow
