@@ -35,7 +35,7 @@ Write-Host "##[warning]--- Add scopes - START ---"
 $headerJson = @{
     'Content-Type' = 'application/json'
 } | ConvertTo-Json -d 3 -Compress 
-$headerJson = $headerJson.replace('"', '\"')
+# $headerJson = $headerJson.replace('"', '\"')
 $graphURL="https://graph.microsoft.com/v1.0/applications/$azAppOID"
 
 Write-Host ""

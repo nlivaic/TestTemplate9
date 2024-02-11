@@ -232,5 +232,6 @@ resource service_bus 'Microsoft.ServiceBus/namespaces@2021-06-01-preview' = {
   }
 }
 
+output sqlServerName string = sqlserver_name
 output appServiceWebName string = appService_web_name
 output dbConnection string = 'Server=tcp:${sqlserver.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlserver::sqlDb.name};Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
