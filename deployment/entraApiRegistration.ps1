@@ -59,7 +59,7 @@ Write-Host "##[section]Existing scopes disabled successfully."
 # 3. Add new scopes from file deployment/oauth2PermissionScopes.json.
 Write-Host ""
 Write-Host "##[section]Creating scopes..."
-az rest --method PATCH --uri $graphurl --headers $headerJson --body '@deployment/oauth2PermissionScopes.json'
+az rest --method PATCH --uri $graphurl --headers $headerJson --body '@deployment/oauth2PermissionScopes.json' --debug
 # 4. Re-enable previously disabled scopes.
 if ($? -eq $false) {
     Write-Error "Error creating scopes."
