@@ -130,6 +130,17 @@ jobs:
             scriptPath: './deployment/sqlEntraAuth.ps1'
             arguments: '$(SQL_ADMINS_GROUP_NAME) $(SQL_ADMIN_USERNAME) $(SQL_ADMIN_PASSWORD)   $(SQL_USERS_GROUP_NAME) $(provisionResourceGroup.resourceGroupName) $(provisionResources.appServiceWebName) $(provisionResources.sqlServerName)'
             powerShellErrorActionPreference: stop
+            
+        - task: AzureCLI@2
+          displayName: 'Migrate database'
+          name: 'migrateDatabase'
+          inputs:
+            azureSubscription: 'AzureConnection'
+            scriptType: pscore
+            scriptLocation: 'inlineScript'
+            inlineScript: dotnet $(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll 
+            arguments: '$(provisionResources.dbConnection) $(SQL_ADMIN_USERNAME) $(SQL_ADMIN_PASSWORD) $(Pipeline.Workspace)/drop/TestTemplate9.Migrations'
+            powerShellErrorActionPreference: stop
 
         #- script: dotnet $(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll "$(provisionResources.dbConnection)" "$(SQL_ADMIN_USERNAME)" "$(SQL_ADMIN_PASSWORD)" "$(Pipeline.Workspace)/drop/TestTemplate9.Migrations"
         #  displayName: 'Migrate database'
