@@ -138,10 +138,11 @@ jobs:
             azureSubscription: 'AzureConnection'
             scriptType: pscore
             scriptLocation: 'inlineScript'
-            inlineScript: dotnet $(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll 
-            arguments: '$(provisionResources.dbConnection) $(SQL_ADMIN_USERNAME) $(SQL_ADMIN_PASSWORD) $(Pipeline.Workspace)/drop/TestTemplate9.Migrations'
+            inlineScript: 'dotnet $1 $2 $3 $4 $5'
+            arguments: '$(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll "$(provisionResources.dbConnection)" $(SQL_ADMIN_USERNAME) $(SQL_ADMIN_PASSWORD) $(Pipeline.Workspace)/drop/TestTemplate9.Migrations'
             powerShellErrorActionPreference: stop
-
+            addSpnToEnvironment: false
+            
         #- script: dotnet $(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll "$(provisionResources.dbConnection)" "$(SQL_ADMIN_USERNAME)" "$(SQL_ADMIN_PASSWORD)" "$(Pipeline.Workspace)/drop/TestTemplate9.Migrations"
         #  displayName: 'Migrate database'
 

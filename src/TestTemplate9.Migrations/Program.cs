@@ -97,6 +97,13 @@ namespace TestTemplate9.Migrations
 
             void InitializeParameters()
             {
+                Console.WriteLine("====================== ARGS START ======================");          // xx
+                Console.WriteLine($"args.Length: {args.Length}");
+                foreach (var arg in args)                                                               // xx
+                {                                                                                       // xx
+                    Console.WriteLine(arg);                                                             // xx
+                }                                                                                       // xx
+                Console.WriteLine("====================== ARGS END ======================");            // xx
                 if (args.Length == 0)
                 {
                     connectionString = config["ConnectionStrings:TestTemplate9Db_Migrations_Connection"];
@@ -105,10 +112,17 @@ namespace TestTemplate9.Migrations
                 }
                 else if (args.Length == 4)
                 {
+                    Console.WriteLine("====================== ARGS INDIVIDUAL START ======================");
                     connectionString = args[0];
                     dbUser = args[1];
                     dbPassword = args[2];
                     scriptsPath = args[3];
+                    Console.WriteLine(args[0]);
+                    Console.WriteLine(args[1]);
+                    Console.WriteLine(args[2]);
+                    Console.WriteLine(args[3]);
+                    Console.WriteLine("====================== ARGS INDIVIDUAL END ======================");
+
                 }
             }
         }
