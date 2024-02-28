@@ -16,7 +16,7 @@ namespace TestTemplate9.Migrations
             var scriptsPath = string.Empty;
 
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
-                ?? "Development";
+                ?? "Production";
             Console.WriteLine($"Environment: {env}.");
             var builder = new ConfigurationBuilder()
                 .AddJsonFile($"appsettings.json", true, true)

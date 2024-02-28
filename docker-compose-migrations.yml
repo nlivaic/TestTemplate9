@@ -2,6 +2,8 @@ version: '3.7'
 
 services:
   testtemplate9.migrations:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     # image: ${DOCKER_REGISTRY-}testtemplate9sql
     env_file: .env
     build:
