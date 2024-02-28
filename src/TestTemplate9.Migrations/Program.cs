@@ -25,20 +25,20 @@ namespace TestTemplate9.Migrations
 
             var config = builder.Build();
             InitializeParameters();
-            //var connectionStringTestTemplate9 = new SqlConnectionStringBuilder(connectionString)
-            //{
-            //    UserID = dbUser,
-            //    Password = dbPassword
-            //}.ConnectionString;
-
-            var connectionStringTestTemplate9 = new SqlConnectionStringBuilder("Server=tcp:wedevtesttemplate9sql1.database.windows.net,1433;Initial Catalog=wedevtesttemplate9sql1db1;Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;")
+            var connectionStringBuilderTestTemplate9 = new SqlConnectionStringBuilder(connectionString);
+            if (env.Equals("Development"))
             {
-                Authentication = SqlAuthenticationMethod.ActiveDirectoryDefault
-            }.ConnectionString;
+                connectionStringBuilderTestTemplate9.UserID = dbUser;
+                connectionStringBuilderTestTemplate9.Password = dbPassword;
+            }
+            else
+            {
+                connectionStringBuilderTestTemplate9.Authentication = SqlAuthenticationMethod.ActiveDirectoryDefault;
+            }
 
             var upgraderTestTemplate9 =
                 DeployChanges.To
-                    .SqlDatabase(connectionStringTestTemplate9)
+                    .SqlDatabase(connectionStringBuilderTestTemplate9.ConnectionString)
                     .WithScriptsFromFileSystem(
                         !string.IsNullOrWhiteSpace(scriptsPath)
                                 ? Path.Combine(scriptsPath, "TestTemplate9Scripts")

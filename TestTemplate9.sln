@@ -48,12 +48,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deployment", "deployment", 
 		deployment\entraApiRegistration.ps1 = deployment\entraApiRegistration.ps1
 		deployment\iac.bicep = deployment\iac.bicep
 		deployment\manifest.json = deployment\manifest.json
+		deployment\migrate.ps1 = deployment\migrate.ps1
 		deployment\oauth2PermissionScopes.json = deployment\oauth2PermissionScopes.json
 		provisionLocal.ps1 = provisionLocal.ps1
 		deployment\provisionResourceGroup.ps1 = deployment\provisionResourceGroup.ps1
 		deployment\provisionResources.ps1 = deployment\provisionResources.ps1
 		deployment\resource-group.bicep = deployment\resource-group.bicep
 		deployment\servicePrincipalLockConfiguration.json = deployment\servicePrincipalLockConfiguration.json
+		deployment\sqlEntraAuth.ps1 = deployment\sqlEntraAuth.ps1
+		deployment\sqlEntraOnlyAuthDisable.ps1 = deployment\sqlEntraOnlyAuthDisable.ps1
 		deployment\variables.ps1 = deployment\variables.ps1
 	EndProjectSection
 EndProject

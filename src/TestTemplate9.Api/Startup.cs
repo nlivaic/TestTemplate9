@@ -76,16 +76,17 @@ namespace TestTemplate9.Api
 
             services.AddDbContext<TestTemplate9DbContext>(options =>
             {
-                //var connString = new SqlConnectionStringBuilder(_configuration.GetConnectionString("TestTemplate9DbConnection") ?? string.Empty)
-                //{
-                //    UserID = _configuration["DB_USER"] ?? string.Empty,
-                //    Password = _configuration["DB_PASSWORD"] ?? string.Empty
-                //};
-                var connString = new SqlConnectionStringBuilder("Server=tcp:wedevtesttemplate9sql1.database.windows.net,1433;Initial Catalog=wedevtesttemplate9sql1db1;Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;")
+                var sqlConnectionStringBuilder = new SqlConnectionStringBuilder(_configuration.GetConnectionString("TestTemplate9DbConnection") ?? string.Empty);
+                if (_hostEnvironment.IsDevelopment())
                 {
-                    Authentication = SqlAuthenticationMethod.ActiveDirectoryManagedIdentity
-                };
-                options.UseSqlServer(connString.ConnectionString);
+                    sqlConnectionStringBuilder.UserID = _configuration["DB_USER"] ?? string.Empty;
+                    sqlConnectionStringBuilder.Password = _configuration["DB_PASSWORD"] ?? string.Empty;
+                }
+                else
+                {
+                    sqlConnectionStringBuilder.Authentication = SqlAuthenticationMethod.ActiveDirectoryManagedIdentity;
+                }
+                options.UseSqlServer(sqlConnectionStringBuilder.ConnectionString);
                 if (_hostEnvironment.IsDevelopment())
                 {
                     options.EnableSensitiveDataLogging(true);
