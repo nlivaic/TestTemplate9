@@ -35,7 +35,7 @@ namespace TestTemplate9.Migrations
             {
                 connectionStringBuilderTestTemplate9.Authentication = SqlAuthenticationMethod.ActiveDirectoryDefault;
             }
-
+            Console.WriteLine("------------- " + connectionStringBuilderTestTemplate9.ConnectionString);
             var upgraderTestTemplate9 =
                 DeployChanges.To
                     .SqlDatabase(connectionStringBuilderTestTemplate9.ConnectionString)

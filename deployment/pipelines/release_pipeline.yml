@@ -85,7 +85,6 @@ jobs:
             scriptPath: './deployment/entraApiRegistration.ps1'
             arguments: '$(PROJECT_NAME) $env:tenantId'
             powerShellErrorActionPreference: stop
-            addSpnToEnvironment: true
         
         - task: AzureCLI@2
           displayName: 'Provision Resource Group'
@@ -122,7 +121,7 @@ jobs:
 
         - task: AzureCLI@2
           displayName: 'Sql Entra Auth'
-          name: 'SqlAdAuth'
+          name: 'SqlEntraAuth'
           inputs:
             azureSubscription: 'AzureConnection'
             scriptType: pscore
@@ -130,6 +129,7 @@ jobs:
             scriptPath: './deployment/sqlEntraAuth.ps1'
             arguments: '$(SQL_ADMINS_GROUP_NAME) $(SQL_ADMIN_USERNAME) $(SQL_ADMIN_PASSWORD) $(SQL_USERS_GROUP_NAME) $(provisionResourceGroup.resourceGroupName) $(provisionResources.appServiceWebName) $(provisionResources.sqlServerName)'
             powerShellErrorActionPreference: stop
+            addSpnToEnvironment: true
             
         - task: AzureCLI@2
           displayName: 'Migrate database'
@@ -142,7 +142,6 @@ jobs:
             scriptPath: './deployment/migrate.ps1'
             arguments: '$(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll "$(provisionResources.dbConnection)" $(SQL_ADMIN_USERNAME) $(SQL_ADMIN_PASSWORD) $(Pipeline.Workspace)/drop/TestTemplate9.Migrations'
             powerShellErrorActionPreference: stop
-            addSpnToEnvironment: false
             
         #- script: dotnet $(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll "$(provisionResources.dbConnection)" "$(SQL_ADMIN_USERNAME)" "$(SQL_ADMIN_PASSWORD)" "$(Pipeline.Workspace)/drop/TestTemplate9.Migrations"
         #  displayName: 'Migrate database'

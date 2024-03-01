@@ -1,6 +1,7 @@
 param ($sqlAdminsGroupName, $sqlAdminUserName, $sqlAdminUserPassword, $sqlUsersGroupName, $resourceGroupName, $appServiceWebName, $sqlServerName)
 
 $domain = (az rest --method get --url 'https://graph.microsoft.com/v1.0/domains?$select=id' --query value --output tsv)
+
 ####################################################
 ### Create and Populate Azure Sql Admin Group
 ####################################################
@@ -20,6 +21,16 @@ $isInGroup = (az ad group member check --group $sqlAdminsGroupId --member-id $sq
 if ($isInGroup -eq 'false') {
     az ad group member add --group $sqlAdminsGroupId --member-id $sqlAdminUserId
     Write-Host "##[section]Added Entra user '$sqlAdminUserId' to group: $sqlAdminsGroupId"
+}
+
+# Is the service principal (ADO service connection) in admins group?
+# If not, add service principal (ADO service connection) to admins group.
+$servicePrincipalId = az ad sp list --filter "appId eq '$env:servicePrincipalId'" --query '[].id' --output tsv
+$isInGroup = (az ad group member check --group $sqlAdminsGroupId --member-id $servicePrincipalId  --query value --output tsv)
+if ($isInGroup -eq 'false') {
+    Write-Host "##[section]Adding service principal '$($servicePrincipalId)' (ADO service connection) to group: $sqlAdminsGroupId..."
+    az ad group member add --group $sqlAdminsGroupId --member-id $servicePrincipalId
+    Write-Host "##[section]Added service principal '$($servicePrincipalId)' (ADO service connection) to group: $sqlAdminsGroupId"
 }
 Write-Host "##[warning]--- Create and Populate Azure Sql Admin Group - END ---"
 
