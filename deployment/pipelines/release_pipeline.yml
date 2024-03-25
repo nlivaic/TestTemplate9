@@ -140,8 +140,9 @@ jobs:
             scriptLocation: 'scriptPath'
             #inlineScript: 'dotnet $1 $2 $3 $4 $5'
             scriptPath: './deployment/migrate.ps1'
-            arguments: '$(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll "$(provisionResources.dbConnection)" $(SQL_ADMIN_USERNAME) $(SQL_ADMIN_PASSWORD) $(Pipeline.Workspace)/drop/TestTemplate9.Migrations'
+            arguments: '$(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll "$(provisionResources.dbConnection)" $env:servicePrincipalId $env:servicePrincipalKey $(Pipeline.Workspace)/drop/TestTemplate9.Migrations'
             powerShellErrorActionPreference: stop
+            addSpnToEnvironment: true
             
         #- script: dotnet $(Pipeline.Workspace)/drop/TestTemplate9.Migrations/TestTemplate9.Migrations.dll "$(provisionResources.dbConnection)" "$(SQL_ADMIN_USERNAME)" "$(SQL_ADMIN_PASSWORD)" "$(Pipeline.Workspace)/drop/TestTemplate9.Migrations"
         #  displayName: 'Migrate database'

@@ -33,7 +33,9 @@ namespace TestTemplate9.Migrations
             }
             else
             {
-                connectionStringBuilderTestTemplate9.Authentication = SqlAuthenticationMethod.ActiveDirectoryDefault;
+                connectionStringBuilderTestTemplate9.UserID = dbUser;
+                connectionStringBuilderTestTemplate9.Password = dbPassword;
+                connectionStringBuilderTestTemplate9.Authentication = SqlAuthenticationMethod.ActiveDirectoryServicePrincipal;
             }
             Console.WriteLine("------------- " + connectionStringBuilderTestTemplate9.ConnectionString);
             var upgraderTestTemplate9 =
@@ -104,12 +106,15 @@ namespace TestTemplate9.Migrations
                     Console.WriteLine(arg);                                                             // xx
                 }                                                                                       // xx
                 Console.WriteLine("====================== ARGS END ======================");            // xx
+
+                // Local database
                 if (args.Length == 0)
                 {
                     connectionString = config["ConnectionStrings:TestTemplate9Db_Migrations_Connection"];
                     dbUser = config["DB_USER"];
                     dbPassword = config["DB_PASSWORD"];
                 }
+                // Remote database
                 else if (args.Length == 4)
                 {
                     Console.WriteLine("====================== ARGS INDIVIDUAL START ======================");
